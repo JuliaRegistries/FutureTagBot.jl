@@ -51,6 +51,7 @@ Base.@kwdef struct Package
     name::String
     uuid::Base.UUID
     url::String
+    gh_repo_slug::String
 end
 
 Base.@kwdef struct ClonedPackage <: AbstractCloned
