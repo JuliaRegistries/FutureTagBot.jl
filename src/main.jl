@@ -8,7 +8,7 @@ function clone_general_registry()
     return cloned_general
 end
 
-function read_already_cloned_package(path::AbstractString)
+function read_already_cloned_package(path::AbstractString; gh_repo_slug = ENV["GITHUB_REPOSITORY"])
     project_filename = abspath(joinpath(path, "Project.toml"))
     project = TOML.parsefile(project_filename)
     name = strip(project["name"])
