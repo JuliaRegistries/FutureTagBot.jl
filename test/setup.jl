@@ -16,6 +16,7 @@ example = FutureTagBot.Package(;
     name = "Example",
     uuid = Base.UUID("7876af07-990d-54b4-ab0e-23690620f79a"),
     url = "https://github.com/JuliaLang/Example.jl.git",
+    gh_repo_slug = "",
 )
 @test example isa Package
 cloned_example = FutureTagBot.cloned(example)
