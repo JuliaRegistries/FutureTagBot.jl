@@ -65,14 +65,17 @@ end
 
 function github_release_single_version(ctx::Context, version::VersionNumber)
     tag_name = _tag_name(version)
+
     gh_repo_slug = ctx.cloned_package.package.gh_repo_slug
-    gh_repo = GitHub.repo(gh_repo_slug; auth = ctx.gh_repo)
+    gh_repo = GitHub.repo(gh_repo_slug; auth)
+
     params = Dict()
     params["tag_name"] = tag_name
-    params["target_commitish"] = tag_name
+    params["target_commitish"] = get_commit_for_existing_tag(ctx, version)
     params["name"] = tag_name
     params["generate_release_notes"] = true
-    GitHub.create_release(gh_repo; auth = gh_auth, params)
+
+    GitHub.create_release(gh_repo; auth, params)
     return nothing
 end
 
