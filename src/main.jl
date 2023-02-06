@@ -40,12 +40,16 @@ function main_all_versions(ctx::Context, ignore_versions::AbstractVector{Version
     vers = get_all_versions(ctx)
     map_collect_errors(vers) do version
         if version in ignore_versions
-            @info "Skipping version because it is in the ignorelist" version
+            @info "Skipping tag $(version) because it is in the ignorelist"
         else
             if tag_already_exists(ctx::Context, version::VersionNumber)
-                @info "Skipping version because a tag with that name already exists" version
+                @info "Skipping tag $(version) because a tag with that name already exists"
             else
                 main_single_version(ctx, version)
+            end
+            if github_release_already_exists(ctx::Context, plan::Plan)
+                @info "Skipping release $(version) because a release already exists for the tag"
+            else 
             end
         end
     end
