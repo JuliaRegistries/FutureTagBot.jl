@@ -78,7 +78,7 @@ function github_release_single_version(ctx::Context, version::VersionNumber)
 
     # GitHub.create_release(gh_repo; params, auth = ctx.gh_auth)
 
-    cmd = `curl -vvvv --fail-with-body -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $(ENV["GITHUB_TOKEN"])" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/$(gh_repo_slug)/releases -d '{"tag_name":"$(tag_name)","target_commitish":"$(commit_for_existing_tag)","name":"$(tag_name)","generate_release_notes":true}'`
+    cmd = `curl -vvvv --fail-with-body -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $(ENV["GITHUB_TOKEN"])" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/$(gh_repo_slug)/releases -d '{"tag_name":"$(tag_name)","target_commitish":"237d0510bed0a276c1a348bc1f65b5d27f47757d","name":"$(tag_name)","generate_release_notes":true}'`
     run(cmd)
 
     return nothing
