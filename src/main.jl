@@ -8,32 +8,27 @@ function clone_general_registry()
     return cloned_general
 end
 
-function read_already_cloned_package(path::AbstractString; gh_repo_slug = ENV["GITHUB_REPOSITORY"])
+function read_already_cloned_package(
+    path::AbstractString;
+    gh_repo_slug = ENV["GITHUB_REPOSITORY"],
+)
     project_filename = abspath(joinpath(path, "Project.toml"))
     project = TOML.parsefile(project_filename)
     name = strip(project["name"])
     uuid_str = strip(project["uuid"])
     uuid = Base.UUID(uuid_str)
-    package = FutureTagBot.Package(;
-        name,
-        uuid,
-        url = "",
-        gh_repo_slug,
-    )
-    cloned_package = ClonedPackage(;
-        package,
-        path,
-    )
+    package = FutureTagBot.Package(; name, uuid, url = "", gh_repo_slug)
+    cloned_package = ClonedPackage(; package, path)
     return cloned_package
 end
 
-function main(; path::AbstractString, ignore_versions::AbstractVector{VersionNumber} = VersionNumber[])
+function main(;
+    path::AbstractString,
+    ignore_versions::AbstractVector{VersionNumber} = VersionNumber[],
+)
     cloned_registry = clone_general_registry()
     cloned_package = read_already_cloned_package(path)
-    ctx = Context(;
-        registry = cloned_registry,
-        package = cloned_package,
-    )
+    ctx = Context(; registry = cloned_registry, package = cloned_package)
     return main_all_versions(ctx, ignore_versions)
 end
 
@@ -77,6 +72,6 @@ function github_release_single_version(ctx::Context, version::VersionNumber)
     params["name"] = tag_name
     params["generate_release_notes"] = true
 
-    GitHub.create_release(gh_repo; params,  auth = ctx.gh_auth)
+    GitHub.create_release(gh_repo; params, auth = ctx.gh_auth)
     return nothing
 end

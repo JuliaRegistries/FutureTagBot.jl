@@ -5,10 +5,6 @@ function generate_plan(ctx::Context, version::VersionNumber)
         msg = ""
         throw(ErrorException(msg))
     end
-    plan = Plan(;
-        version,
-        candidate.commit,
-        target.tree,
-    )
+    plan = Plan(; version, candidate.commit, target.tree)
     return plan
 end
