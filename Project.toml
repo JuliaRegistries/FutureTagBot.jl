@@ -1,0 +1,18 @@
+name = "FutureTagBot"
+uuid = "aad37465-2b3a-4ede-b4ea-f5792ced75b4"
+authors = ["Dilum Aluthge", "contributors"]
+version = "1.0.0-DEV"
+
+[deps]
+GitHub = "bc5e4493-9b4d-5f90-b8aa-2b2bcaad7a26"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[compat]
+julia = "1.8"
+
+[extras]
+GitHub = "bc5e4493-9b4d-5f90-b8aa-2b2bcaad7a26"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test", "GitHub"]
