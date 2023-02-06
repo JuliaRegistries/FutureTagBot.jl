@@ -8,7 +8,7 @@ function clone_general_registry()
     return cloned_general
 end
 
-function read_already_cloned_package(path::AbstractString)
+function read_already_cloned_package(path::AbstractString; gh_repo_slug = ENV["GITHUB_REPOSITORY"])
     project_filename = abspath(joinpath(path, "Project.toml"))
     project = TOML.parsefile(project_filename)
     name = strip(project["name"])
@@ -40,21 +40,42 @@ function main_all_versions(ctx::Context, ignore_versions::AbstractVector{Version
     vers = get_all_versions(ctx)
     map_collect_errors(vers) do version
         if version in ignore_versions
-            @info "Skipping version because it is in the ignorelist" version
+            @info "Skipping tag $(version) because it is in the ignorelist"
         else
             if tag_already_exists(ctx::Context, version::VersionNumber)
-                @info "Skipping version because a tag with that name already exists" version
+                @info "Skipping tag $(version) because a tag with that name already exists"
             else
-                main_single_version(ctx, version)
+                tag_single_version(ctx, version)
+            end
+            if github_release_already_exists(ctx, version)
+                @info "Skipping release $(version) because a release already exists for the tag"
+            else
+                github_release_single_version(ctx, version)
             end
         end
     end
     return nothing
 end
 
-function main_single_version(ctx::Context, version::VersionNumber)
+function tag_single_version(ctx::Context, version::VersionNumber)
     plan = generate_plan(ctx, version)
     create_tag(ctx, plan)
     push_tag(ctx, plan)
+    return nothing
+end
+
+function github_release_single_version(ctx::Context, version::VersionNumber)
+    tag_name = _tag_name(version)
+
+    gh_repo_slug = ctx.cloned_package.package.gh_repo_slug
+    gh_repo = GitHub.repo(gh_repo_slug; auth)
+
+    params = Dict()
+    params["tag_name"] = tag_name
+    params["target_commitish"] = get_commit_for_existing_tag(ctx, version)
+    params["name"] = tag_name
+    params["generate_release_notes"] = true
+
+    GitHub.create_release(gh_repo; auth, params)
     return nothing
 end
