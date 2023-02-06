@@ -56,9 +56,27 @@ function main_all_versions(ctx::Context, ignore_versions::AbstractVector{Version
     return nothing
 end
 
-function main_single_version(ctx::Context, version::VersionNumber)
+function tag_single_version(ctx::Context, version::VersionNumber)
     plan = generate_plan(ctx, version)
     create_tag(ctx, plan)
     push_tag(ctx, plan)
     return nothing
+end
+
+function github_release_single_version(ctx::Context, version::VersionNumber)
+    tag_name = _tag_name(version)
+    gh_repo_slug = ctx.cloned_package.package.gh_repo_slug
+    gh_repo = GitHub.repo(gh_repo_slug; auth = ctx.gh_repo)
+    params = Dict()
+    params["tag_name"] = tag_name
+    params["target_commitish"] = tag_name
+    params["name"] = tag_name
+    params["generate_release_notes"] = true
+    GitHub.create_release(gh_repo; auth = gh_auth, params)
+    return nothing
+end
+
+@api_default function create_release(api::GitHubAPI, repo; options...)
+    result = gh_post_json(api, "/repos/$(name(repo))/releases"; options...)
+    return Release(result)
 end
