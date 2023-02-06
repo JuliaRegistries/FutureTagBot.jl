@@ -78,8 +78,3 @@ function github_release_single_version(ctx::Context, version::VersionNumber)
     GitHub.create_release(gh_repo; auth, params)
     return nothing
 end
-
-@api_default function create_release(api::GitHubAPI, repo; options...)
-    result = gh_post_json(api, "/repos/$(name(repo))/releases"; options...)
-    return Release(result)
-end
