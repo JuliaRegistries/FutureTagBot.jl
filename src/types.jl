@@ -78,12 +78,8 @@ function _get_github_auth_auto()
         return NoAuth()
     end
     return with_delay() do
-        @info "Attempting to authenticate to GitHub..."
-        auth = GitHub.authenticate(github_token)
-        whoami_user = GitHub.whoami(; auth)
-        whoami = whoami_user.login
-        @info "Successfully authenticated to GitHub as `$(whoami)`"
-        auth
+        @info "Authenticating to GitHub"
+        GitHub.authenticate(github_token)
     end
 end
 
