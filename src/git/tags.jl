@@ -5,7 +5,7 @@ function tag_already_exists(ctx::Context, version::VersionNumber)
     cloned_package = ctx.cloned_package
     tag_name = _tag_name(version)
     str = cd(cloned_package.path) do
-        cmd = `git tag -l $(tag_name)`
+        cmd = `git rev-list -1 $(tag_name)`
         strip(read(cmd, String))
     end
     return !isempty(str)
