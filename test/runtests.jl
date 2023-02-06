@@ -12,6 +12,7 @@ using FutureTagBot: version_to_target
 
 @testset "FutureTagBot.jl" begin
     run(`git --version`)
+    run(`curl --version`)
 
     include("setup.jl")
 
