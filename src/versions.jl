@@ -54,7 +54,12 @@ function _version_to_commit(ctx::Context, version::VersionNumber)
     return cd(package_dir) do
         @info "Running git-blame"
         line_number = _versions_toml_line_number(ctx, version)
-        blame_output = strip(read(`git --no-pager blame Versions.toml -L$(line_number),$(line_number)`, String))
+        blame_output = strip(
+            read(
+                `git --no-pager blame Versions.toml -L$(line_number),$(line_number)`,
+                String,
+            ),
+        )
         r_blame = r"^(\w*?) "
         loc_blame = only(findall(r_blame, blame_output))
         m_blame = match(r_blame, blame_output)
