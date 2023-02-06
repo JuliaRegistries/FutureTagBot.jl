@@ -69,7 +69,7 @@ function github_release_single_version(ctx::Context, version::VersionNumber)
     tag_name = _tag_name(version)
 
     gh_repo_slug = ctx.cloned_package.package.gh_repo_slug
-    gh_repo = GitHub.repo(gh_repo_slug; auth)
+    gh_repo = GitHub.repo(gh_repo_slug; auth = ctx.gh_auth)
 
     params = Dict()
     params["tag_name"] = tag_name
@@ -77,6 +77,6 @@ function github_release_single_version(ctx::Context, version::VersionNumber)
     params["name"] = tag_name
     params["generate_release_notes"] = true
 
-    GitHub.create_release(gh_repo; auth, params)
+    GitHub.create_release(gh_repo; params,  auth = ctx.gh_auth)
     return nothing
 end
