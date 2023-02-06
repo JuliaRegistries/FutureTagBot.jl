@@ -1,0 +1,43 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags: '*'
+concurrency:
+  # Skip intermediate builds: all builds except for builds on the `main` or `release-*` branches
+  # Cancel intermediate builds: only pull request builds
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref != 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release-') || github.run_number }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - '1.8'
+          - '1'
+          - 'nightly'
+        os:
+          - ubuntu-latest
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          persist-credentials: false
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '${{ matrix.version }}'
+      - uses: julia-actions/julia-runtest@fa1e6fac940a2785c35dddb5fbb98ed945e3d2a2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          coverage: true
+      - uses: julia-actions/julia-processcoverage@03114f09f119417c3242a9fb6e0b722676aedf38
+      - uses: codecov/codecov-action@d9f34f8cd5cb3b3eb79b3e4b5dae3a16df499a70
+        with:
+          file: lcov.info
