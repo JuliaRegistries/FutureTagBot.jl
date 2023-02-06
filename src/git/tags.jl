@@ -11,6 +11,16 @@ function tag_already_exists(ctx::Context, version::VersionNumber)
     return !isempty(str)
 end
 
+function get_commit_for_existing_tag(ctx::Context, version::VersionNumber)
+    cloned_package = ctx.cloned_package
+    tag_name = _tag_name(version)
+    commit = cd(cloned_package.path) do
+        cmd = `git rev-parse $(tag_name)`
+        strip(read(cmd, String))
+    end
+    return commit
+end
+
 function create_tag(ctx::Context, plan::Plan)
     cloned_package = ctx.cloned_package
     tag_name = _tag_name(plan)
