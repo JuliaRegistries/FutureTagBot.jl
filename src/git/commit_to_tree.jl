@@ -22,3 +22,12 @@ function candidate_satisfies_target(ctx::Context, candidate::Candidate, target::
     @warn msg candidate.commit candidate_tree target.tree
     return false
 end
+
+function verify_plan(ctx::Context, plan::Plan)
+    tree_from_commit = _commit_to_tree(ctx, plan.commit)
+    if tree_from_commit != plan.tree
+        msg = "Plan is inconsistent: $(plan)"
+        throw(ErrorException(msg))
+    end
+    return nothing
+end

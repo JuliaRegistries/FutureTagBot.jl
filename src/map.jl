@@ -9,14 +9,14 @@ function map_collect_errors(f::F, collection) where {F<:Function}
             f(element)
         catch ex
             bt = catch_backtrace()
-            push!(errors, (ex, bt))
+            push!(errors, (element, ex, bt))
         end
     end
     if isempty(errors)
         return nothing
     end
-    for (ex, bt) in errors
-        @error "" exception = (ex, bt)
+    for (element, ex, bt) in errors
+        @error "" element exception = (ex, bt)
     end
     num_errors = length(errors)
     msg = "Caught $(num_errors) error(s)"
