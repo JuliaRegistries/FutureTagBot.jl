@@ -47,7 +47,7 @@ function main_all_versions(ctx::Context, ignore_versions::AbstractVector{Version
             else
                 tag_single_version(ctx, version)
             end
-            if github_release_already_exists(ctx::Context, plan::Plan)
+            if github_release_already_exists(ctx, version)
                 @info "Skipping release $(version) because a release already exists for the tag"
             else
                 github_release_single_version(ctx, version)
