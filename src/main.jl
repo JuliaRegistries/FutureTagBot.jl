@@ -18,6 +18,7 @@ function read_already_cloned_package(path::AbstractString; gh_repo_slug = ENV["G
         name,
         uuid,
         url = "",
+        gh_repo_slug,
     )
     cloned_package = ClonedPackage(;
         package,
