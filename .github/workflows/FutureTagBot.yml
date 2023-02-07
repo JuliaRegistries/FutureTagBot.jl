@@ -4,8 +4,9 @@ on:
     types:
       - created
   workflow_dispatch:
-permissions:
-  contents: write
+env:
+  JULIA_PKG_SERVER_REGISTRY_PREFERENCE: 'eager'
+permissions: write-all
 jobs:
   FutureTagBot:
     if: github.event_name == 'workflow_dispatch' || github.actor == 'JuliaTagBot'
