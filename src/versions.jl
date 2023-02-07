@@ -18,8 +18,8 @@ function get_all_versions(ctx::Context)
     parsed_versions = parse_versions(ctx)
     vers = collect(keys(parsed_versions))
 
-    # We'll do the most recent version number first
-    sort!(vers; rev = true)
+    # We process the versions in ascending order
+    sort!(vers)
 
     return vers
 end
