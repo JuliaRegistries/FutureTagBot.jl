@@ -2,12 +2,12 @@ name: Format Fix
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 concurrency:
-  # Skip intermediate builds: all builds except for builds on the `master` branch
+  # Skip intermediate builds: all builds except for builds on the `main` branch
   # Cancel intermediate builds: only pull request builds
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref != 'refs/heads/master' || github.run_number }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref != 'refs/heads/main' || github.run_number }}
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 permissions:
   contents: write
