@@ -19,7 +19,7 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
           ssh-key: '${{ secrets.FUTURETAGBOT_PRIVATE_KEY }}'
-      - uses: julia-actions/setup-julia@b315a4d9881690c63d53fc0175b150a3776140bd
+      - uses: julia-actions/setup-julia@f40c4b69330df1d22e7590c12e76dc2f9c66e0bc
         with:
           version: '1'
       - run: git config user.name "github-actions[bot]"
