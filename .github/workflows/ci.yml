@@ -44,7 +44,7 @@ jobs:
       - uses: julia-actions/setup-julia@f40c4b69330df1d22e7590c12e76dc2f9c66e0bc
         with:
           version: '${{ matrix.version }}'
-      - uses: julia-actions/julia-runtest@fa1e6fac940a2785c35dddb5fbb98ed945e3d2a2
+      - uses: julia-actions/julia-runtest@3378215696ece08eb04fa0857940865ae97d7881
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
